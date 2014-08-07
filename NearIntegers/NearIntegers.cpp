@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[])
 {
-	const double epsilon = 0.000000001;
+	const double epsilon = 0.0000001;
 	srand(static_cast<unsigned int>(time(NULL)));
 	
 	while (1)
@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
 
 ExpressionMaker::ExpressionMaker()
 {
+	int stackDepth = 1;
 	opCodes.push_back(Op_value);
 	while (1)
 	{
@@ -50,14 +51,16 @@ ExpressionMaker::ExpressionMaker()
 		}
 		else
 		{
-			op = static_cast<OpCode>(rand() % Op_END);
+			op = static_cast<OpCode>(rand() % Op_value);
 		}
 
-		for (int i = 1; i < opCodeArgCount[op]; ++i)
+		for (int i = stackDepth; i < opCodeArgCount[op]; ++i)
 		{
 			opCodes.push_back(Op_value);
+			stackDepth++;
 		}
 		opCodes.push_back(op);
+		stackDepth -= opCodeArgCount[op] - 1;
 	}
 }
 
