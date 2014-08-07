@@ -9,7 +9,12 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <list>
+#include <cassert>
+#include <vector>
+#include <ctime>
 
+#include "NearIntegers.h"
 
 
 // TODO: reference additional headers your program requires here
