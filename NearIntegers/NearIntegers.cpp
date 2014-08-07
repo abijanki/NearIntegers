@@ -6,8 +6,10 @@
 
 int main(int argc, char* argv[])
 {
-	const double epsilon = 0.0000001;
+	const double epsilon = 0.00000001;
 	srand(static_cast<unsigned int>(time(NULL)));
+
+	std::list<std::list<OpCode>> seen;
 	
 	while (1)
 	{
@@ -29,9 +31,32 @@ int main(int argc, char* argv[])
 
 		if (fabs(fmod(ret, 1)) < epsilon && fabs(ret) > 1 && fabs(ret) < 10 && static_cast<int>(modResult) != modResult)
 		{
-			printf("Found result: %f\n", ret);
-			e.Dump();
-			printf("\n");
+			// This is expensive, but should be rare.
+			bool seenBefore = false;
+			for (auto it = seen.begin(); it != seen.end(); ++it)
+			{
+				if (it->size() == e.opCodes.size())
+				{
+					for (auto x1 = it->begin(), x2 = e.opCodes.begin(); x1 != it->end(); ++x1, ++x2)
+					{
+						if (*x1 != *x2)
+						{
+							break;
+						}
+					}
+
+					seenBefore = true;
+					break;
+				}
+			}
+
+			if (!seenBefore)
+			{
+				printf("Found result: %f\n", ret);
+				e.Dump();
+				printf("\n");
+				seen.push_back(e.opCodes);
+			}
 		}
 	}
 
